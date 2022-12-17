@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.container {
+  width: min(90%, 1280px);
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 1rem;
+
+  &--store {
+    grid-template-columns: 1fr 5fr;
+  }
+
+  &--products {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

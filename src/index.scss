@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  margin-left: calc(100vw - 100%); // fix scrollbar jump
+}
+
 
 .container {
   width: min(90%, 1280px);
@@ -16,7 +20,20 @@
     grid-template-columns: 1fr 5fr;
   }
 
-  &--products {
+  &--product-grid-4 {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  &--product-grid-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  &--cart {
+    grid-template-columns: 5fr 2fr;
+    grid-gap: 2rem;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

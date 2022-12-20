@@ -1,16 +1,22 @@
-import { Outlet, Link } from "react-router-dom"
-
-
+import { Link, Outlet } from "react-router-dom"
+import { useStoreContext } from "./store"
 
 const App = () => {
-
+  const { cart, total } = useStoreContext();
 
   return (
     <>
-      <nav>
-        <div className="container flex justify-between items-center py-4">
-          <Link to='/'>Online Store</Link>
-          <Link to="/cart">Cart</Link>
+      <nav className="py-4">
+        <div className="container flex justify-between items-center">
+          <h1>
+            <Link to='/'>Online Store</Link>
+          </h1>
+          <div>
+            {total}$
+          </div>
+          <div>
+            <Link to='/cart'>Cart <span>{cart.length}</span></Link>
+          </div>
         </div>
       </nav>
       <main>

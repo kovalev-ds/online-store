@@ -15,9 +15,12 @@ export type Product = {
 };
 
 export type FilterOptions = {
-  search: string;
-  sort: string;
-} & Pick<Product, "category" | "brand">;
+  search: string[];
+  sort: string[];
+  category: string[];
+  brand: string[];
+  size: string[];
+};
 
 export enum sortBy {
   priceASC = "price-ASC",

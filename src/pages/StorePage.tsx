@@ -1,12 +1,15 @@
 import clsx from "clsx"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { json, LoaderFunction, useLoaderData } from "react-router-dom"
+
 import Button from "../components/Button"
 import Card from "../components/Card"
 import FilterCard from "../components/FilterCard"
 import FilterControl from "../components/FilterControl"
 import List from "../components/List"
 import SearchControl from "../components/SearchControl"
+
+import { prepareParams, useSearchState } from "../hooks/useSearchState"
 import { fetchBrands, fetchCategories, fetchProducts } from "../http/services/product"
 import { useStoreContext } from "../store"
 import { FilterOptions, sortBy } from "../types"
@@ -15,7 +18,10 @@ const StorePage = () => {
 
   const { addToCart, removeFromCart, cart } = useStoreContext()
   const { products, categories, brands } = useLoaderData() as LoaderData
-  const [search, setSearch] = useSearchParams()
+
+  const [params, setParams] = useSearchState<FilterOptions>()
+
+  console.log('render STORE PAGE');
 
   return (
     <div className="container">
@@ -26,24 +32,12 @@ const StorePage = () => {
               <FilterControl
                 key={value}
                 value={value}
-                selected={Boolean(search.get("category")?.includes(value))}
-                handle={(isChecked) => {
-                  const current = search.get("category");
-                  const SEPARATOR = "↕";
-                  if (isChecked) {
-                    if (!current) {
-                      search.set('category', value)
-                    } else {
-                      search.set("category", [...current.split(SEPARATOR), value].join(SEPARATOR))
-                    }
-                  } else {
-                    if (current) {
-                      const v = current.split(SEPARATOR).filter(v => v !== value).join(SEPARATOR)
-                      v ? search.set("category", v) : search.delete("category")
-                    }
-                  }
-                  setSearch(search);
-                }} />
+                selected={Boolean(params.category?.includes(value))}
+                handle={(isChecked) =>
+                  setParams(builder => isChecked
+                    ? builder.append("category", value)
+                    : builder.remove("category", value))}
+              />
             )} />
           </FilterCard>
 
@@ -52,24 +46,11 @@ const StorePage = () => {
               <FilterControl
                 key={value}
                 value={value}
-                selected={Boolean(search.get("brand")?.includes(value))}
-                handle={(isChecked) => {
-                  const current = search.get("brand");
-                  const SEPARATOR = "↕";
-                  if (isChecked) {
-                    if (!current) {
-                      search.set('brand', value)
-                    } else {
-                      search.set("brand", [...current.split(SEPARATOR), value].join(SEPARATOR))
-                    }
-                  } else {
-                    if (current) {
-                      const v = current.split(SEPARATOR).filter(v => v !== value).join(SEPARATOR)
-                      v ? search.set("brand", v) : search.delete("brand")
-                    }
-                  }
-                  setSearch(search);
-                }} />
+                selected={Boolean(params.brand?.includes(value))}
+                handle={(isChecked) => setParams(builder => isChecked
+                  ? builder.append("brand", value)
+                  : builder.remove("brand", value))
+                } />
             )} />
 
           </FilterCard>
@@ -77,39 +58,34 @@ const StorePage = () => {
         <div>
           <div className="flex items-center justify-between py-4">
             <select
-              onChange={(e) => { search.set("sort", e.target.value); setSearch(search) }}
-              value={search.get("sort") ?? ''}
-            >
+              value={params.search?.toString()}
+              onChange={(e) => setParams(builder => builder.set("sort", e.target.value))}>
               <option value={sortBy.priceASC}>Sort By Price ASC</option>
               <option value={sortBy.priceDESC}>Sort By Price DESC</option>
               <option value={sortBy.ratingASC}>Sort By Rating ASC</option>
               <option value={sortBy.ratingDESC}>Sort By Rating DESC</option>
             </select>
             <div className="w-[20ch]">found: <span>{products.length}</span></div>
+
             <SearchControl
-              search={search.get("search") ?? ''}
-              handle={(value) => {
-                value
-                  ? search.set('search', value)
-                  : search.delete('search');
-                setSearch(search, { replace: value !== '' })
-              }
-              }
+              search={params.search ?? ""}
+              handle={(value) => setParams(builder => builder.set("search", value))}
             />
             <div className="space-x-4">
-              <button onClick={() => { search.set("size", "4"); setSearch(search) }}>4x4</button>
-              <button onClick={() => { search.set("size", "6"); setSearch(search) }}>6x6</button>
+              <button onClick={() => setParams(builder => builder.set("size", "4"))}>4x4</button>
+              <button onClick={() => setParams(builder => builder.set("size", "6"))}>6x6</button>
             </div>
           </div>
-          <div className={clsx("grid", `grid--product-grid-${search.get("size") ?? 4}`)}>
+          <div className={clsx("grid", `grid--product-grid-${params.size ?? 4}`)}>
             <List items={products} fn={(item) => (
               <Card key={item.id}>
                 <Link to={`products/${item.id}`}>
                   <Card.Media src={item.thumbnail} alt={item.title} />
                 </Link>
                 <h2 className="text-center">{item.title}</h2>
-                <h4>{item.price}</h4>
-                <h5>{item.rating}</h5>
+                <h3>BRAND: {item.brand}</h3>
+                <h4>PRICE: {item.price}</h4>
+                <h5>RATING: {item.rating}</h5>
                 <Card.Actions>
                   {cart.includes(item)
                     ? <Button onClick={() => removeFromCart(item)}>Drop From Cart</Button>
@@ -135,8 +111,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-
-  const params = Object.fromEntries(new URL(request.url).searchParams) as FilterOptions;
+  const params = prepareParams<FilterOptions>(new URL(request.url).searchParams);
 
   return json<LoaderData>({
     products: await fetchProducts(params),

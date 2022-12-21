@@ -47,7 +47,7 @@ export const fetchProducts = async (
         (item) => filterPredicates[key]?.call(null, item, value) ?? true
       );
     }, products),
-  ].sort(sortByPredicates[sort as sortBy]);
+  ].sort(sortByPredicates[sort?.toString() as sortBy]);
 };
 
 export const fetchProduct = async (id: string): Promise<Product | null> => {
@@ -74,13 +74,13 @@ const sortByPredicates: {
 };
 
 const filterPredicates: {
-  [key: string]: (item: Product, value: string) => boolean;
+  [key: string]: (item: Product, value: string[]) => boolean;
 } = {
-  category: (item: Product, value: string) =>
-    value.split(SEPARATOR).includes(item.category),
-  brand: (item: Product, value: string) =>
-    value.split(SEPARATOR).includes(item.brand),
-  search: (item: Product, value: string) =>
-    item.title.toLowerCase().includes(value.toLowerCase()) ||
-    item.description.toLowerCase().includes(value.toLowerCase()),
+  category: (item: Product, value: string[]) =>
+    value.some((v) => v.toLowerCase() === item.category.toLowerCase()),
+  brand: (item: Product, value: string[]) =>
+    value.some((v) => v.toLowerCase() === item.brand.toLowerCase()),
+  search: (item: Product, value: string[]) =>
+    item.title.toLowerCase().includes(value.toString().toLowerCase()) ||
+    item.description.toLowerCase().includes(value.toString().toLowerCase()),
 };

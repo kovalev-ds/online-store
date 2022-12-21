@@ -1,0 +1,59 @@
+import { useSearchParams } from "react-router-dom";
+
+type Builder<T> = {
+  append: (key: Extract<keyof T, string>, value: string) => void;
+  remove: (key: Extract<keyof T, string>, value: string) => void;
+  set: (key: Extract<keyof T, string>, value: string) => void;
+};
+
+const SEPARATOR = "↕";
+
+const serialize = (items: string[]) => {
+  return items.join(SEPARATOR);
+};
+
+const deserialize = (str: string) => {
+  return str.split(SEPARATOR);
+};
+
+export const prepareParams = <T>(search: URLSearchParams) => {
+  return Object.fromEntries(
+    [...search].map(([key, value]) => [key, deserialize(value)])
+  ) as T;
+};
+
+export const useSearchState = <T>() => {
+  const [search, setSearch] = useSearchParams();
+
+  const builder: Builder<T> = {
+    append(key, value) {
+      const current = search.get(key);
+      search.set(
+        key,
+        serialize(current ? [...deserialize(current), value] : [value])
+      );
+    },
+    remove(key, value) {
+      const current = search.get(key);
+      if (current) {
+        const newValue = serialize(
+          deserialize(current).filter((v) => v !== value)
+        );
+
+        newValue ? search.set(key, newValue) : search.delete(key);
+      }
+    },
+    set(key, value) {
+      console.log("SET:", key, value);
+
+      value ? search.set(key, value) : search.delete(key);
+    },
+  };
+
+  const setState = (fn: (builder: Builder<T>) => void) => {
+    fn(builder);
+    setSearch(search);
+  };
+
+  return [prepareParams<T>(search), setState] as [T, typeof setState];
+};

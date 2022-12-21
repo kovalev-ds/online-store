@@ -9,24 +9,14 @@ type FilterControlProps = {
 const FilterControl: FC<FilterControlProps> = (props) => {
   const { value, handle, selected } = props;
 
-  const [checked, setChecked] = useState(false)
-
-  useEffect(() => {
-    handle(checked)
-  }, [checked])
-
-  useEffect(() => {
-    setChecked(() => selected)
-  }, [selected])
-
   return (
     <div>
       <label>
         <input
           type="checkbox"
           value={value}
-          checked={checked}
-          onChange={() => setChecked(prev => !prev)}
+          checked={selected}
+          onChange={(e) => handle(e.target.checked)}
         />
         <span>{value}</span>
       </label>

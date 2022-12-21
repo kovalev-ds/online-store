@@ -7,7 +7,7 @@ import FilterCard from "../components/FilterCard"
 import FilterControl from "../components/FilterControl"
 import List from "../components/List"
 import SearchControl from "../components/SearchControl"
-import { fetchBrands, fetchCategories, findProducts } from "../http/services/product"
+import { fetchBrands, fetchCategories, fetchProducts } from "../http/services/product"
 import { useStoreContext } from "../store"
 import { FilterOptions, sortBy } from "../types"
 
@@ -128,7 +128,7 @@ const StorePage = () => {
 export default StorePage
 
 type LoaderData = {
-  products: Awaited<ReturnType<typeof findProducts>>
+  products: Awaited<ReturnType<typeof fetchProducts>>
   categories: Awaited<ReturnType<typeof fetchCategories>>
   brands: Awaited<ReturnType<typeof fetchBrands>>
 
@@ -139,7 +139,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const params = Object.fromEntries(new URL(request.url).searchParams) as FilterOptions;
 
   return json<LoaderData>({
-    products: await findProducts(params),
+    products: await fetchProducts(params),
     categories: await fetchCategories(),
     brands: await fetchBrands()
   })

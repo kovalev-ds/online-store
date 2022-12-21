@@ -1,5 +1,5 @@
 import { useLoaderData, LoaderFunction } from "react-router-dom"
-import { findProduct } from "../http/services/product";
+import { fetchProduct } from "../http/services/product";
 import { Product } from "../types";
 
 const ProductPage = () => {
@@ -26,7 +26,7 @@ export const loader: LoaderFunction = ({ params }) => {
     })
   }
 
-  return findProduct(id)
+  return fetchProduct(id)
 }
 
 export default ProductPage;

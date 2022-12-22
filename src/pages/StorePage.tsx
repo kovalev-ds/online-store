@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { Link } from "react-router-dom"
+import { AwaitProps, Link } from "react-router-dom"
 import { json, LoaderFunction, useLoaderData } from "react-router-dom"
 
 import Button from "../components/Button"
@@ -7,17 +7,18 @@ import Card from "../components/Card"
 import FilterCard from "../components/FilterCard"
 import FilterControl from "../components/FilterControl"
 import List from "../components/List"
+import RangeControl from "../components/RangeControl"
 import SearchControl from "../components/SearchControl"
 
 import { prepareParams, useSearchState } from "../hooks/useSearchState"
-import { fetchBrands, fetchCategories, fetchProducts } from "../http/services/product"
+import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchProducts } from "../http/services/product"
 import { useStoreContext } from "../store"
 import { FilterOptions, sortBy } from "../types"
 
 const StorePage = () => {
 
   const { addToCart, removeFromCart, cart } = useStoreContext()
-  const { products, categories, brands } = useLoaderData() as LoaderData
+  const { products, categories, brands, prices } = useLoaderData() as LoaderData
 
   const [params, setParams] = useSearchState<FilterOptions>()
 
@@ -52,7 +53,16 @@ const StorePage = () => {
                   : builder.remove("brand", value))
                 } />
             )} />
-
+          </FilterCard>
+          <FilterCard title="price">
+            <RangeControl
+              min={prices.min}
+              max={prices.max}
+              minValue={Number(params.price?.at(0) ?? prices.min)}
+              maxValue={Number(params.price?.at(1) ?? prices.max)}
+              handle={(min, max) => {
+                setParams(builder => builder.set("price", [`${min}`, `${max}`]))
+              }} />
           </FilterCard>
         </div>
         <div>
@@ -107,7 +117,7 @@ type LoaderData = {
   products: Awaited<ReturnType<typeof fetchProducts>>
   categories: Awaited<ReturnType<typeof fetchCategories>>
   brands: Awaited<ReturnType<typeof fetchBrands>>
-
+  prices: Awaited<ReturnType<typeof fetchMinMaxPrice>>
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -116,6 +126,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({
     products: await fetchProducts(params),
     categories: await fetchCategories(),
-    brands: await fetchBrands()
+    brands: await fetchBrands(),
+    prices: await fetchMinMaxPrice()
   })
 }

@@ -9,7 +9,7 @@ const FilterCard: FC<FilterCardProps> = (props) => {
   const { children, title } = props;
   return (
     <div>
-      <h6>{title}</h6>
+      <h6 className="py-4">{title}</h6>
       <div className="max-h-40 overflow-y-auto scrollbar-hide">{children}</div>
     </div>
   )

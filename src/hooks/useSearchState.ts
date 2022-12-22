@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 type Builder<T> = {
   append: (key: Extract<keyof T, string>, value: string) => void;
   remove: (key: Extract<keyof T, string>, value: string) => void;
-  set: (key: Extract<keyof T, string>, value: string) => void;
+  set: (key: Extract<keyof T, string>, value: string | string[]) => void;
 };
 
 const SEPARATOR = "↕";
@@ -46,7 +46,11 @@ export const useSearchState = <T>() => {
     set(key, value) {
       console.log("SET:", key, value);
 
-      value ? search.set(key, value) : search.delete(key);
+      if (Array.isArray(value)) {
+        search.set(key, serialize(value));
+      } else {
+        value ? search.set(key, value) : search.delete(key);
+      }
     },
   };
 

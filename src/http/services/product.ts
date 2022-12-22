@@ -1,8 +1,6 @@
 import { FilterOptions, Product, SortBy } from "../../types";
 import { makeRequest } from "../makeRequest";
 
-const SEPARATOR = "↕";
-
 const API_URL = "https://dummyjson.com";
 
 type ResponseDTO = {
@@ -42,8 +40,6 @@ const fetchData = async (): Promise<ResponseDTO> => {
 export const fetchProducts = async (
   options: Partial<FilterOptions>
 ): Promise<Product[]> => {
-  console.log("SERVICE", options);
-
   const { sort, ...filtering } = options;
   const { products } = await fetchData();
 

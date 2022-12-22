@@ -1,5 +1,4 @@
-import clsx from "clsx"
-import { AwaitProps, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { json, LoaderFunction, useLoaderData } from "react-router-dom"
 
 import Button from "../components/Button"
@@ -7,6 +6,7 @@ import Card from "../components/Card"
 import FilterCard from "../components/FilterCard"
 import FilterControl from "../components/FilterControl"
 import List from "../components/List"
+import Page from "../components/Page"
 import RangeControl from "../components/RangeControl"
 import SearchControl from "../components/SearchControl"
 import SelectControl from "../components/SelectControl"
@@ -23,51 +23,52 @@ const StorePage = () => {
 
   const [params, setParams] = useSearchState<FilterOptions>()
 
-  console.log('render STORE PAGE');
-
   return (
-    <div className="container">
-      <div className="grid grid--store">
-        <div className="space-y-6">
-          <FilterCard title="categories">
-            <List items={categories} fn={(value) => (
-              <FilterControl
-                key={value}
-                value={value}
-                selected={Boolean(params.category?.includes(value))}
-                handle={(isChecked) =>
-                  setParams(builder => isChecked
-                    ? builder.append("category", value)
-                    : builder.remove("category", value))}
-              />
-            )} />
-          </FilterCard>
+    <Page>
+      <Page.Store
+        aside={
+          <>
+            <FilterCard title="categories">
+              <List items={categories} fn={(value) => (
+                <FilterControl
+                  key={value}
+                  value={value}
+                  selected={Boolean(params.category?.includes(value))}
+                  handle={(isChecked) =>
+                    setParams(builder => isChecked
+                      ? builder.append("category", value)
+                      : builder.remove("category", value))}
+                />
+              )} />
+            </FilterCard>
 
-          <FilterCard title="brands">
-            <List items={brands} fn={(value) => (
-              <FilterControl
-                key={value}
-                value={value}
-                selected={Boolean(params.brand?.includes(value))}
-                handle={(isChecked) => setParams(builder => isChecked
-                  ? builder.append("brand", value)
-                  : builder.remove("brand", value))
-                } />
-            )} />
-          </FilterCard>
-          <FilterCard title="price">
-            <RangeControl
-              min={prices.min}
-              max={prices.max}
-              minValue={Number(params.price?.at(0) ?? prices.min)}
-              maxValue={Number(params.price?.at(1) ?? prices.max)}
-              handle={(min, max) => {
-                setParams(builder => builder.set("price", [`${min}`, `${max}`]))
-              }} />
-          </FilterCard>
-        </div>
-        <div>
-          <div className="flex items-center justify-between py-4">
+            <FilterCard title="brands">
+              <List items={brands} fn={(value) => (
+                <FilterControl
+                  key={value}
+                  value={value}
+                  selected={Boolean(params.brand?.includes(value))}
+                  handle={(isChecked) => setParams(builder => isChecked
+                    ? builder.append("brand", value)
+                    : builder.remove("brand", value))
+                  } />
+              )} />
+            </FilterCard>
+
+            <FilterCard title="price">
+              <RangeControl
+                min={prices.min}
+                max={prices.max}
+                minValue={Number(params.price?.at(0) ?? prices.min)}
+                maxValue={Number(params.price?.at(1) ?? prices.max)}
+                handle={(min, max) => {
+                  setParams(builder => builder.set("price", [`${min}`, `${max}`]))
+                }} />
+            </FilterCard>
+          </>
+        }
+        header={
+          <>
             <SelectControl
               value={params.sort?.toString()}
               handle={value => setParams(builder => builder.set("sort", value))} />
@@ -82,8 +83,11 @@ const StorePage = () => {
               <button onClick={() => setParams(builder => builder.set("size", "4"))}>4x4</button>
               <button onClick={() => setParams(builder => builder.set("size", "6"))}>6x6</button>
             </div>
-          </div>
-          <div className={clsx("grid", `grid--product-grid-${params.size ?? 4}`)}>
+          </>
+        }
+        size={params.size}
+        content={
+          <>
             <List items={products} fn={(item) => (
               <Card key={item.id}>
                 <Link to={`products/${item.id}`}>
@@ -94,17 +98,16 @@ const StorePage = () => {
                 <h4>PRICE: {item.price}</h4>
                 <h5>RATING: {item.rating}</h5>
                 <Card.Actions>
-                  {cart.includes(item)
+                  {cart.some((({ id }) => item.id === id))
                     ? <Button onClick={() => removeFromCart(item)}>Drop From Cart</Button>
                     : <Button onClick={() => addToCart(item)}>Add To Cart</Button>
                   }
                 </Card.Actions>
               </Card>
             )} />
-          </div>
-        </div>
-      </div>
-    </div >
+          </>
+        } />
+    </Page>
   )
 }
 

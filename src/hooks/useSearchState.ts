@@ -44,8 +44,6 @@ export const useSearchState = <T>() => {
       }
     },
     set(key, value) {
-      console.log("SET:", key, value);
-
       if (Array.isArray(value)) {
         search.set(key, serialize(value));
       } else {

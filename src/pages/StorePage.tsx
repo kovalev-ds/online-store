@@ -68,8 +68,9 @@ const StorePage = () => {
         <div>
           <div className="flex items-center justify-between py-4">
             <select
-              value={params.search?.toString()}
+              value={params.sort?.toString() ?? 'default'}
               onChange={(e) => setParams(builder => builder.set("sort", e.target.value))}>
+              <option value='default' disabled>Sort Options:</option>
               <option value={sortBy.priceASC}>Sort By Price ASC</option>
               <option value={sortBy.priceDESC}>Sort By Price DESC</option>
               <option value={sortBy.ratingASC}>Sort By Rating ASC</option>

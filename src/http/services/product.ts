@@ -1,4 +1,4 @@
-import { FilterOptions, Product, sortBy } from "../../types";
+import { FilterOptions, Product, SortBy } from "../../types";
 import { makeRequest } from "../makeRequest";
 
 const SEPARATOR = "↕";
@@ -53,7 +53,7 @@ export const fetchProducts = async (
         (item) => filterPredicates[key]?.call(null, item, value) ?? true
       );
     }, products),
-  ].sort(sortByPredicates[sort?.toString() as sortBy]);
+  ].sort(sortByPredicates[sort?.toString() as SortBy]);
 };
 
 export const fetchProduct = async (id: string): Promise<Product | null> => {
@@ -77,10 +77,10 @@ export const fetchMinMaxPrice = async () => {
 const sortByPredicates: {
   [key: string]: (itemA: Product, itemB: Product) => number;
 } = {
-  [sortBy.priceASC]: (itemA, itemB) => itemA.price - itemB.price,
-  [sortBy.priceDESC]: (itemA, itemB) => itemB.price - itemA.price,
-  [sortBy.ratingASC]: (itemA, itemB) => itemA.rating - itemB.rating,
-  [sortBy.ratingDESC]: (itemA, itemB) => itemB.rating - itemA.rating,
+  [SortBy.priceASC]: (itemA, itemB) => itemA.price - itemB.price,
+  [SortBy.priceDESC]: (itemA, itemB) => itemB.price - itemA.price,
+  [SortBy.ratingASC]: (itemA, itemB) => itemA.rating - itemB.rating,
+  [SortBy.ratingDESC]: (itemA, itemB) => itemB.rating - itemA.rating,
 };
 
 const filterPredicates: {

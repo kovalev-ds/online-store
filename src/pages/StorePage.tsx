@@ -9,11 +9,12 @@ import FilterControl from "../components/FilterControl"
 import List from "../components/List"
 import RangeControl from "../components/RangeControl"
 import SearchControl from "../components/SearchControl"
+import SelectControl from "../components/SelectControl"
 
 import { prepareParams, useSearchState } from "../hooks/useSearchState"
 import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchProducts } from "../http/services/product"
 import { useStoreContext } from "../store"
-import { FilterOptions, sortBy } from "../types"
+import { FilterOptions } from "../types"
 
 const StorePage = () => {
 
@@ -67,19 +68,14 @@ const StorePage = () => {
         </div>
         <div>
           <div className="flex items-center justify-between py-4">
-            <select
-              value={params.sort?.toString() ?? 'default'}
-              onChange={(e) => setParams(builder => builder.set("sort", e.target.value))}>
-              <option value='default' disabled>Sort Options:</option>
-              <option value={sortBy.priceASC}>Sort By Price ASC</option>
-              <option value={sortBy.priceDESC}>Sort By Price DESC</option>
-              <option value={sortBy.ratingASC}>Sort By Rating ASC</option>
-              <option value={sortBy.ratingDESC}>Sort By Rating DESC</option>
-            </select>
+            <SelectControl
+              value={params.sort?.toString()}
+              handle={value => setParams(builder => builder.set("sort", value))} />
+
             <div className="w-[20ch]">found: <span>{products.length}</span></div>
 
             <SearchControl
-              search={params.search ?? ""}
+              value={params.search ?? ""}
               handle={(value) => setParams(builder => builder.set("search", value))}
             />
             <div className="space-x-4">

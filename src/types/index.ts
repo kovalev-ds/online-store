@@ -23,7 +23,7 @@ export type FilterOptions = {
   price: string[];
 };
 
-export enum sortBy {
+export enum SortBy {
   priceASC = "price-ASC",
   priceDESC = "price-DESC",
   ratingASC = "rating-ASC",

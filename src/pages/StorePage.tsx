@@ -12,7 +12,7 @@ import SearchControl from "../components/SearchControl"
 import SelectControl from "../components/SelectControl"
 
 import { prepareParams, useSearchState } from "../hooks/useSearchState"
-import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchMinMaxStock, fetchProducts } from "../http/services/product"
+import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchMinMaxStock, fetchProducts } from "../api/products"
 import { useCartContext } from "../context/CartContext"
 import { FilterOptions } from "../types"
 

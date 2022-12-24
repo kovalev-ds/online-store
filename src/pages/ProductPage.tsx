@@ -1,5 +1,5 @@
 import { useLoaderData, LoaderFunction } from "react-router-dom"
-import { fetchProduct } from "../http/services/product";
+import { fetchProduct } from "../api/products";
 import { Product } from "../types";
 
 const ProductPage = () => {

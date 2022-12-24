@@ -18,7 +18,7 @@ import { FilterOptions } from "../types"
 
 const StorePage = () => {
 
-  const { addToCart, removeFromCart, cart } = useCartContext()
+  const { addToCart, dropFromCart, cart } = useCartContext()
   const { products, categories, brands, prices, stock } = useLoaderData() as LoaderData
 
   const [params, setParams] = useSearchState<FilterOptions>()
@@ -110,7 +110,7 @@ const StorePage = () => {
                 <h5>RATING: {item.rating}</h5>
                 <Card.Actions>
                   {cart.some((({ product }) => item.id === product.id))
-                    ? <Button onClick={() => removeFromCart(item)}>Drop From Cart</Button>
+                    ? <Button onClick={() => dropFromCart(item)}>Drop From Cart</Button>
                     : <Button onClick={() => addToCart(item)}>Add To Cart</Button>
                   }
                 </Card.Actions>

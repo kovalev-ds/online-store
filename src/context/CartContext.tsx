@@ -25,7 +25,7 @@ type CartContextValue = {
   totalCount: number,
   addToCart: (product: Product) => void,
   removeFromCart: (product: Product) => void,
-
+  dropFromCart: (product: Product) => void;
 }
 
 type CartState = {
@@ -100,6 +100,13 @@ const CartProvider: FC<CartProviderProps> = ({ children }) => {
       })
   }
 
+  const dropFromCart = (product: Product) => {
+    dispatch({
+      type: ActionTypes.REMOVE_FROM_CART,
+      payload: state.cart.filter((item) => item.product.id !== product.id)
+    })
+  }
+
   const totalPrice = useMemo(() =>
     state.cart.reduce((sum, item) => sum + item.count * item.product.price, 0), [state.cart])
 
@@ -119,7 +126,7 @@ const CartProvider: FC<CartProviderProps> = ({ children }) => {
   }, [state.cart])
 
   return (
-    <CartContext.Provider value={{ ...state, totalPrice, totalCount, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ ...state, totalPrice, totalCount, addToCart, removeFromCart, dropFromCart }}>
       {children}
     </CartContext.Provider>
   )

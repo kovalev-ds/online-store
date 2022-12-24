@@ -54,7 +54,7 @@ export const useSearchState = <T>() => {
 
   const setState = (fn: (builder: Builder<T>) => void) => {
     fn(builder);
-    setSearch(search);
+    setSearch(search, { replace: true });
   };
 
   return [prepareParams<T>(search), setState] as [T, typeof setState];

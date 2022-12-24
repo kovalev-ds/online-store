@@ -13,12 +13,12 @@ import SelectControl from "../components/SelectControl"
 
 import { prepareParams, useSearchState } from "../hooks/useSearchState"
 import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchProducts } from "../http/services/product"
-import { useStoreContext } from "../store"
+import { useCartContext } from "../context/CartContext"
 import { FilterOptions } from "../types"
 
 const StorePage = () => {
 
-  const { addToCart, removeFromCart, cart } = useStoreContext()
+  const { addToCart, removeFromCart, cart } = useCartContext()
   const { products, categories, brands, prices } = useLoaderData() as LoaderData
 
   const [params, setParams] = useSearchState<FilterOptions>()
@@ -98,7 +98,7 @@ const StorePage = () => {
                 <h4>PRICE: {item.price}</h4>
                 <h5>RATING: {item.rating}</h5>
                 <Card.Actions>
-                  {cart.some((({ id }) => item.id === id))
+                  {cart.some((({ product }) => item.id === product.id))
                     ? <Button onClick={() => removeFromCart(item)}>Drop From Cart</Button>
                     : <Button onClick={() => addToCart(item)}>Add To Cart</Button>
                   }

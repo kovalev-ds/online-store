@@ -1,23 +1,29 @@
 import List from "../components/List";
-import { useStoreContext } from "../store";
+import { useCartContext } from "../context/CartContext";
 
 const CartPage = () => {
 
-  const { total, cart } = useStoreContext()
+  const { totalCount, totalPrice, cart, addToCart, removeFromCart } = useCartContext()
 
   return (
     <div className="container grid grid--cart">
-      <div className="border">
-        {cart.length
-          ? <List items={cart} fn={(item) => (
+      <div className="border space-y-4">
+        <List items={cart} fn={({ product, count }) => (
+          <div key={product.id} className="flex">
+            <img src={product.thumbnail} alt={product.thumbnail} className="h-20" />
             <div>
-              <h1>{item.title}</h1>
-            </div>)} />
-          : <div>Cart is Empty</div>
-        }
+              <h1>{product.title}</h1>
+              <p>{product.description}</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button onClick={() => addToCart(product)}>add</button>
+              <div>{count}</div>
+              <button onClick={() => removeFromCart(product)}>remove</button>
+            </div>
+          </div>)} />
       </div>
 
-      <div className="border">Total Price {total} $</div>
+      <div className="border">Total Price {totalPrice} $</div>
     </div>
   )
 }

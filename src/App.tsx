@@ -1,8 +1,8 @@
 import { Link, Outlet } from "react-router-dom"
-import { useStoreContext } from "./store"
+import { useCartContext } from "./context/CartContext"
 
 const App = () => {
-  const { cart, total } = useStoreContext();
+  const { totalPrice, totalCount } = useCartContext();
 
   return (
     <>
@@ -12,10 +12,10 @@ const App = () => {
             <Link to='/'>Online Store</Link>
           </h1>
           <div>
-            {total}$
+            {totalPrice}$
           </div>
           <div>
-            <Link to='/cart'>Cart <span>{cart.length}</span></Link>
+            <Link to='/cart'>Cart <span>{totalCount}</span></Link>
           </div>
         </div>
       </nav>

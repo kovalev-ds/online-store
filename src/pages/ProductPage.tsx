@@ -16,13 +16,12 @@ const ProductPage = () => {
 }
 
 export const loader: LoaderFunction = ({ params }) => {
-
   const { id } = params;
 
   if (!id) {
     throw new Response("", {
       status: 404,
-      statusText: "Not Found",
+      statusText: `Not found`
     })
   }
 

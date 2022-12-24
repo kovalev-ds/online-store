@@ -12,14 +12,14 @@ import SearchControl from "../components/SearchControl"
 import SelectControl from "../components/SelectControl"
 
 import { prepareParams, useSearchState } from "../hooks/useSearchState"
-import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchProducts } from "../http/services/product"
+import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchMinMaxStock, fetchProducts } from "../http/services/product"
 import { useCartContext } from "../context/CartContext"
 import { FilterOptions } from "../types"
 
 const StorePage = () => {
 
   const { addToCart, removeFromCart, cart } = useCartContext()
-  const { products, categories, brands, prices } = useLoaderData() as LoaderData
+  const { products, categories, brands, prices, stock } = useLoaderData() as LoaderData
 
   const [params, setParams] = useSearchState<FilterOptions>()
 
@@ -63,6 +63,17 @@ const StorePage = () => {
                 maxValue={Number(params.price?.at(1) ?? prices.max)}
                 handle={(min, max) => {
                   setParams(builder => builder.set("price", [`${min}`, `${max}`]))
+                }} />
+            </FilterCard>
+
+            <FilterCard title="stock">
+              <RangeControl
+                min={stock.min}
+                max={stock.max}
+                minValue={Number(params.stock?.at(0) ?? stock.min)}
+                maxValue={Number(params.stock?.at(1) ?? stock.max)}
+                handle={(min, max) => {
+                  setParams(builder => builder.set("stock", [`${min}`, `${max}`]))
                 }} />
             </FilterCard>
           </>
@@ -118,6 +129,7 @@ type LoaderData = {
   categories: Awaited<ReturnType<typeof fetchCategories>>
   brands: Awaited<ReturnType<typeof fetchBrands>>
   prices: Awaited<ReturnType<typeof fetchMinMaxPrice>>
+  stock: Awaited<ReturnType<typeof fetchMinMaxStock>>
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -127,6 +139,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     products: await fetchProducts(params),
     categories: await fetchCategories(),
     brands: await fetchBrands(),
-    prices: await fetchMinMaxPrice()
+    prices: await fetchMinMaxPrice(),
+    stock: await fetchMinMaxStock()
   })
 }

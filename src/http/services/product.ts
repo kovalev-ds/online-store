@@ -8,6 +8,7 @@ type ResponseDTO = {
   categories: string[];
   brands: string[];
   prices: { min: number; max: number };
+  stock: { min: number; max: number };
 };
 
 const cache: ResponseDTO = {
@@ -15,6 +16,7 @@ const cache: ResponseDTO = {
   categories: [],
   brands: [],
   prices: { min: 0, max: 0 },
+  stock: { min: 0, max: 0 },
 };
 
 const fetchData = async (): Promise<ResponseDTO> => {
@@ -32,6 +34,10 @@ const fetchData = async (): Promise<ResponseDTO> => {
   cache.prices = {
     min: Math.min(...products.map((item) => item.price)),
     max: Math.max(...products.map((item) => item.price)),
+  };
+  cache.stock = {
+    min: Math.min(...products.map((item) => item.stock)),
+    max: Math.max(...products.map((item) => item.stock)),
   };
 
   return cache;
@@ -70,6 +76,10 @@ export const fetchMinMaxPrice = async () => {
   return (await fetchData()).prices;
 };
 
+export const fetchMinMaxStock = async () => {
+  return (await fetchData()).stock;
+};
+
 const sortByPredicates: {
   [key: string]: (itemA: Product, itemB: Product) => number;
 } = {
@@ -88,6 +98,8 @@ const filterPredicates: {
     value.some((v) => v.toLowerCase() === item.brand.toLowerCase()),
   price: (item: Product, value: string[]) =>
     item.price >= Number(value[0]) && item.price <= Number(value[1]),
+  stock: (item: Product, value: string[]) =>
+    item.stock >= Number(value[0]) && item.stock <= Number(value[1]),
   search: (item: Product, value: string[]) =>
     item.title.toLowerCase().includes(value.toString().toLowerCase()) ||
     item.description.toLowerCase().includes(value.toString().toLowerCase()),

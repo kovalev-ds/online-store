@@ -21,6 +21,7 @@ export type FilterOptions = {
   brand: string[];
   size: string[];
   price: string[];
+  stock: string[];
 };
 
 export enum SortBy {

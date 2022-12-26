@@ -1,24 +1,20 @@
 import { FC } from "react"
-import { SortBy } from "../types"
 import List from "./List"
 
-const options: { name: string, value: SortBy }[] = [
-  { name: "Sort By Price ASC", value: SortBy.priceASC },
-  { name: "Sort By Price DESC", value: SortBy.priceDESC },
-  { name: "Sort By Rating ASC", value: SortBy.ratingASC },
-  { name: "Sort By Rating DESC", value: SortBy.ratingDESC },
 
-]
+type SelectOption = { name: string, value: string };
 
 type SelectControlProps = {
-  value?: string;
   handle: (value: string) => void
+  options: SelectOption[],
+  title: string;
+  value?: string;
 }
 
-const SelectControl: FC<SelectControlProps> = ({ value, handle }) => {
+const SelectControl: FC<SelectControlProps> = ({ value, handle, options, title }) => {
   return (
     <select value={value ?? 'default'} onChange={(e) => handle(e.target.value)}>
-      <option value='default' disabled>Sort Options:</option>
+      <option value='default' disabled>{title}</option>
       <List items={options} fn={item => (
         <option key={item.value} value={item.value}>{item.name}</option>
       )} />

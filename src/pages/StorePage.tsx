@@ -16,6 +16,8 @@ import { fetchBrands, fetchCategories, fetchMinMaxPrice, fetchMinMaxStock, fetch
 import { useCartContext } from "../context/CartContext"
 import { FilterOptions } from "../types"
 
+import { sortByOptions } from "../config"
+
 const StorePage = () => {
 
   const { addToCart, dropFromCart, cart } = useCartContext()
@@ -81,6 +83,8 @@ const StorePage = () => {
         header={
           <>
             <SelectControl
+              options={sortByOptions}
+              title="Sort Options:"
               value={params.sort?.toString()}
               handle={value => setParams(builder => builder.set("sort", value))} />
 

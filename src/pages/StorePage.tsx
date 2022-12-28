@@ -1,33 +1,32 @@
-import { Link } from "react-router-dom";
-import { json, LoaderFunction, useLoaderData } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { json, LoaderFunction, useLoaderData } from 'react-router-dom';
 
-import Button from "../components/Button";
-import Card from "../components/Card";
-import FilterCard from "../components/FilterCard";
-import FilterControl from "../components/FilterControl";
-import List from "../components/List";
-import Page from "../components/Page";
-import RangeControl from "../components/RangeControl";
-import SearchControl from "../components/SearchControl";
-import SelectControl from "../components/SelectControl";
+import Button from '../components/Button';
+import Card from '../components/Card';
+import FilterCard from '../components/FilterCard';
+import FilterControl from '../components/FilterControl';
+import List from '../components/List';
+import Page from '../components/Page';
+import RangeControl from '../components/RangeControl';
+import SearchControl from '../components/SearchControl';
+import SelectControl from '../components/SelectControl';
 
-import { prepareParams, useSearchState } from "../hooks/useSearchState";
+import { prepareParams, useSearchState } from '../hooks/useSearchState';
 import {
   fetchBrands,
   fetchCategories,
   fetchMinMaxPrice,
   fetchMinMaxStock,
   fetchProducts,
-} from "../api/products";
-import { useCartContext } from "../context/CartContext";
-import { FilterOptions } from "../types";
+} from '../api/products';
+import { useCartContext } from '../context/CartContext';
+import { FilterOptions } from '../types';
 
-import { sortByOptions } from "../config";
+import { sortByOptions } from '../config';
 
 const StorePage = () => {
   const { addToCart, dropFromCart, cart } = useCartContext();
-  const { products, categories, brands, prices, stock } =
-    useLoaderData() as LoaderData;
+  const { products, categories, brands, prices, stock } = useLoaderData() as LoaderData;
 
   const [params, setParams] = useSearchState<FilterOptions>();
 
@@ -47,8 +46,8 @@ const StorePage = () => {
                     handle={(isChecked) =>
                       setParams((builder) =>
                         isChecked
-                          ? builder.append("category", value)
-                          : builder.remove("category", value)
+                          ? builder.append('category', value)
+                          : builder.remove('category', value)
                       )
                     }
                   />
@@ -66,9 +65,7 @@ const StorePage = () => {
                     selected={Boolean(params.brand?.includes(value))}
                     handle={(isChecked) =>
                       setParams((builder) =>
-                        isChecked
-                          ? builder.append("brand", value)
-                          : builder.remove("brand", value)
+                        isChecked ? builder.append('brand', value) : builder.remove('brand', value)
                       )
                     }
                   />
@@ -83,9 +80,7 @@ const StorePage = () => {
                 minValue={Number(params.price?.at(0) ?? prices.min)}
                 maxValue={Number(params.price?.at(1) ?? prices.max)}
                 handle={(min, max) => {
-                  setParams((builder) =>
-                    builder.set("price", [`${min}`, `${max}`])
-                  );
+                  setParams((builder) => builder.set('price', [`${min}`, `${max}`]));
                 }}
               />
             </FilterCard>
@@ -97,9 +92,7 @@ const StorePage = () => {
                 minValue={Number(params.stock?.at(0) ?? stock.min)}
                 maxValue={Number(params.stock?.at(1) ?? stock.max)}
                 handle={(min, max) => {
-                  setParams((builder) =>
-                    builder.set("stock", [`${min}`, `${max}`])
-                  );
+                  setParams((builder) => builder.set('stock', [`${min}`, `${max}`]));
                 }}
               />
             </FilterCard>
@@ -111,9 +104,7 @@ const StorePage = () => {
               options={sortByOptions}
               title="Sort Options:"
               value={params.sort?.toString()}
-              handle={(value) =>
-                setParams((builder) => builder.set("sort", value))
-              }
+              handle={(value) => setParams((builder) => builder.set('sort', value))}
             />
 
             <div className="w-[20ch]">
@@ -121,22 +112,12 @@ const StorePage = () => {
             </div>
 
             <SearchControl
-              value={params.search ?? ""}
-              handle={(value) =>
-                setParams((builder) => builder.set("search", value))
-              }
+              value={params.search ?? ''}
+              handle={(value) => setParams((builder) => builder.set('search', value))}
             />
             <div className="space-x-4">
-              <button
-                onClick={() => setParams((builder) => builder.set("size", "4"))}
-              >
-                4x4
-              </button>
-              <button
-                onClick={() => setParams((builder) => builder.set("size", "6"))}
-              >
-                6x6
-              </button>
+              <button onClick={() => setParams((builder) => builder.set('size', '4'))}>4x4</button>
+              <button onClick={() => setParams((builder) => builder.set('size', '6'))}>6x6</button>
             </div>
           </>
         }
@@ -150,21 +131,15 @@ const StorePage = () => {
                   <Link to={`products/${item.id}`}>
                     <Card.Media src={item.thumbnail} alt={item.title} />
                   </Link>
-                  <h2 className="text-center text-yellow-600 font-semibold">
-                    {item.title}
-                  </h2>
+                  <h2 className="text-center text-yellow-600 font-semibold">{item.title}</h2>
                   <h3>BRAND: {item.brand}</h3>
                   <h4>PRICE: {item.price}</h4>
                   <h5>RATING: {item.rating}</h5>
                   <Card.Actions>
                     {cart.some(({ product }) => item.id === product.id) ? (
-                      <Button onClick={() => dropFromCart(item)}>
-                        Drop From Cart
-                      </Button>
+                      <Button onClick={() => dropFromCart(item)}>Drop From Cart</Button>
                     ) : (
-                      <Button onClick={() => addToCart(item)}>
-                        Add To Cart
-                      </Button>
+                      <Button onClick={() => addToCart(item)}>Add To Cart</Button>
                     )}
                   </Card.Actions>
                 </Card>
@@ -188,9 +163,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const params = prepareParams<FilterOptions>(
-    new URL(request.url).searchParams
-  );
+  const params = prepareParams<FilterOptions>(new URL(request.url).searchParams);
 
   return json<LoaderData>({
     products: await fetchProducts(params),

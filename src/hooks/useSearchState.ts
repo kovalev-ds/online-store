@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from 'react-router-dom';
 
 type Builder<T> = {
   append: (key: Extract<keyof T, string>, value: string) => void;
@@ -6,7 +6,7 @@ type Builder<T> = {
   set: (key: Extract<keyof T, string>, value: string | string[]) => void;
 };
 
-const SEPARATOR = "↕";
+const SEPARATOR = '↕';
 
 const serialize = (items: string[]) => {
   return items.join(SEPARATOR);
@@ -17,9 +17,7 @@ const deserialize = (str: string) => {
 };
 
 export const prepareParams = <T>(search: URLSearchParams) => {
-  return Object.fromEntries(
-    [...search].map(([key, value]) => [key, deserialize(value)])
-  ) as T;
+  return Object.fromEntries([...search].map(([key, value]) => [key, deserialize(value)])) as T;
 };
 
 export const useSearchState = <T>() => {
@@ -28,17 +26,12 @@ export const useSearchState = <T>() => {
   const builder: Builder<T> = {
     append(key, value) {
       const current = search.get(key);
-      search.set(
-        key,
-        serialize(current ? [...deserialize(current), value] : [value])
-      );
+      search.set(key, serialize(current ? [...deserialize(current), value] : [value]));
     },
     remove(key, value) {
       const current = search.get(key);
       if (current) {
-        const newValue = serialize(
-          deserialize(current).filter((v) => v !== value)
-        );
+        const newValue = serialize(deserialize(current).filter((v) => v !== value));
 
         newValue ? search.set(key, newValue) : search.delete(key);
       }

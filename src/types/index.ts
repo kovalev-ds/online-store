@@ -25,8 +25,8 @@ export type FilterOptions = {
 };
 
 export enum SortBy {
-  priceASC = "price-ASC",
-  priceDESC = "price-DESC",
-  ratingASC = "rating-ASC",
-  ratingDESC = "rating-DESC",
+  priceASC = 'price-ASC',
+  priceDESC = 'price-DESC',
+  ratingASC = 'rating-ASC',
+  ratingDESC = 'rating-DESC',
 }

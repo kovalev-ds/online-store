@@ -1,15 +1,15 @@
-import { FC, ReactNode } from "react";
-import Portal from "./Portal";
+import { FC, ReactNode } from 'react';
+import Portal from './Portal';
 
 type PopupProps = {
   children: ReactNode;
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 const Popup: FC<PopupProps> = ({ children, isOpen, onClose }) => {
   if (!isOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -22,13 +22,10 @@ const Popup: FC<PopupProps> = ({ children, isOpen, onClose }) => {
           onClick={onClose}
         />
 
-        <div className="z-[2]">
-          {children}
-        </div>
-
+        <div className="z-[2]">{children}</div>
       </div>
     </Portal>
-  )
-}
+  );
+};
 
 export default Popup;

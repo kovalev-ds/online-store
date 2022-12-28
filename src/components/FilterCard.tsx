@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode } from 'react';
 
 type FilterCardProps = {
   title: string;
@@ -10,9 +10,7 @@ const FilterCard: FC<FilterCardProps> = (props) => {
   return (
     <div>
       <h6 className="py-4 text-lg font-medium">{title}</h6>
-      <div className="max-h-56 overflow-y-auto scrollbar-hide shadow-xl rounded-md">
-        {children}
-      </div>
+      <div className="max-h-56 overflow-y-auto scrollbar-hide shadow-xl rounded-md">{children}</div>
     </div>
   );
 };

@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  // margin-left: calc(100vw - 100%); // fix scrollbar jump
-}
-
-
 .container {
   width: min(90%, 1280px);
   margin-inline: auto;
@@ -46,7 +41,7 @@ html {
   justify-content: center;
   height: 1.5rem;
 
-  & [type=range] {
+  & [type='range'] {
     position: absolute;
     appearance: none;
 
@@ -67,7 +62,7 @@ html {
       position: relative;
       z-index: 1;
       cursor: pointer;
-      transition: .125s ease-in-out;
+      transition: 0.125s ease-in-out;
 
       &:active {
         box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
@@ -76,15 +71,14 @@ html {
   }
 }
 
-
-.range[type=range] {
+.range[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   position: relative;
   height: 2px;
   width: 96%;
   margin: 2%;
-  background-color: #C6C6C6;
+  background-color: #c6c6c6;
   pointer-events: none;
 
   &::-webkit-slider-thumb {
@@ -94,7 +88,7 @@ html {
     height: 16px;
     background-color: #fff;
     border-radius: 50%;
-    box-shadow: 0 0 0 1px #C6C6C6;
+    box-shadow: 0 0 0 1px #c6c6c6;
     cursor: pointer;
 
     &:hover {

@@ -1,12 +1,12 @@
-import { FC } from "react"
+import { FC } from 'react';
 
 type SearchControlProps = {
   value: string | string[];
   handle: (value: string) => void;
-}
+};
 
 const SearchControl: FC<SearchControlProps> = (props) => {
-  const { value = '', handle } = props
+  const { value = '', handle } = props;
 
   return (
     <div>
@@ -15,9 +15,10 @@ const SearchControl: FC<SearchControlProps> = (props) => {
         value={value}
         name="search"
         type="search"
-        placeholder="Quick Search" />
+        placeholder="Quick Search"
+      />
     </div>
-  )
-}
+  );
+};
 
-export default SearchControl
+export default SearchControl;

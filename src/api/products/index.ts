@@ -1,7 +1,7 @@
-import { FilterOptions, Product, SortBy } from "../../types";
-import { makeRequest } from "../makeRequest";
+import { FilterOptions, Product, SortBy } from '../../types';
+import { makeRequest } from '../makeRequest';
 
-const API_URL = "https://dummyjson.com";
+const API_URL = 'https://dummyjson.com';
 
 type ResponseDTO = {
   products: Product[];
@@ -24,9 +24,9 @@ const fetchData = async (): Promise<ResponseDTO> => {
     return cache;
   }
 
-  const products = await makeRequest<{ products: Product[] }>(
-    `${API_URL}/products?limit=50`
-  ).then((data) => data.products);
+  const products = await makeRequest<{ products: Product[] }>(`${API_URL}/products?limit=50`).then(
+    (data) => data.products
+  );
 
   cache.products = products;
   cache.categories = [...new Set(products.map((item) => item.category))];
@@ -43,25 +43,19 @@ const fetchData = async (): Promise<ResponseDTO> => {
   return cache;
 };
 
-export const fetchProducts = async (
-  options: Partial<FilterOptions>
-): Promise<Product[]> => {
+export const fetchProducts = async (options: Partial<FilterOptions>): Promise<Product[]> => {
   const { sort, ...filtering } = options;
   const { products } = await fetchData();
 
   return [
     ...Object.entries(filtering).reduce((products, [key, value]) => {
-      return products.filter(
-        (item) => filterPredicates[key]?.call(null, item, value) ?? true
-      );
+      return products.filter((item) => filterPredicates[key]?.call(null, item, value) ?? true);
     }, products),
   ].sort(sortByPredicates[sort?.toString() as SortBy]);
 };
 
 export const fetchProduct = async (id: string): Promise<Product | null> => {
-  return (
-    (await fetchData()).products.find((item) => item.id === Number(id)) ?? null
-  );
+  return (await fetchData()).products.find((item) => item.id === Number(id)) ?? null;
 };
 
 export const fetchCategories = async (): Promise<string[]> => {

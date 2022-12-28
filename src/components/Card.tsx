@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode } from 'react';
 
 type CardProps = {
   children: ReactNode;
@@ -27,11 +27,7 @@ type CardMediaProps = {
 const CardMedia: FC<CardMediaProps> = ({ src, alt }) => {
   return (
     <div>
-      <img
-        className="aspect-video object-cover hover:opacity-75 rounded-md"
-        src={src}
-        alt={alt}
-      />
+      <img className="aspect-video object-cover hover:opacity-75 rounded-md" src={src} alt={alt} />
     </div>
   );
 };

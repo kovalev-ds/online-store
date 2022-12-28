@@ -116,7 +116,7 @@ const StorePage = () => {
               }
             />
 
-            <div className="w-[20ch]">
+            <div className="w-[20ch] ml-20">
               found: <span>{products.length}</span>
             </div>
 

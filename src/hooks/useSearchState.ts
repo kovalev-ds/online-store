@@ -16,31 +16,31 @@ const deserialize = (str: string) => {
   return str.split(SEPARATOR);
 };
 
-export const prepareParams = <T>(search: URLSearchParams) => {
+export const prepareParams = <T extends object>(search: URLSearchParams) => {
   return Object.fromEntries([...search].map(([key, value]) => [key, deserialize(value)])) as T;
 };
 
-export const useSearchState = <T>() => {
+export const useSearchState = <T extends object>() => {
   const [search, setSearch] = useSearchParams();
 
   const builder: Builder<T> = {
     append(key, value) {
       const current = search.get(key);
-      search.set(key, serialize(current ? [...deserialize(current), value] : [value]));
+      search.set(key, serialize(current !== null ? [...deserialize(current), value] : [value]));
     },
     remove(key, value) {
       const current = search.get(key);
-      if (current) {
+      if (current !== null) {
         const newValue = serialize(deserialize(current).filter((v) => v !== value));
 
-        newValue ? search.set(key, newValue) : search.delete(key);
+        newValue !== '' ? search.set(key, newValue) : search.delete(key);
       }
     },
     set(key, value) {
       if (Array.isArray(value)) {
         search.set(key, serialize(value));
       } else {
-        value ? search.set(key, value) : search.delete(key);
+        value !== '' ? search.set(key, value) : search.delete(key);
       }
     },
   };

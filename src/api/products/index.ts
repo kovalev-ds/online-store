@@ -20,7 +20,7 @@ const cache: ResponseDTO = {
 };
 
 const fetchData = async (): Promise<ResponseDTO> => {
-  if (cache.products.length) {
+  if (cache.products.length > 0) {
     return cache;
   }
 

@@ -121,7 +121,7 @@ const CartProvider: FC<CartProviderProps> = ({ children }) => {
   useEffect(() => {
     const cart = localStorage.getItem('cart');
 
-    if (cart) {
+    if (cart !== null) {
       dispatch({ type: ActionTypes.INIT_CARD, payload: JSON.parse(cart) });
     }
   }, []);

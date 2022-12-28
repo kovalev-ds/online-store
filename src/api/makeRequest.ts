@@ -7,7 +7,7 @@ type RequestOptions = {
   method: RequestMethod;
 };
 
-export const makeRequest = <T>(endpoint: string, options?: RequestOptions): Promise<T> => {
+export const makeRequest = async <T>(endpoint: string, options?: RequestOptions): Promise<T> => {
   console.log('Requesting data...');
 
   return fetch(endpoint, options)

@@ -7,8 +7,6 @@ type CardProps = {
 type CardDescendants = {
   Media: typeof CardMedia;
   Actions: typeof CardActions;
-  Body: typeof CardBody;
-  Header: typeof CardHeader;
 };
 
 const Card: FC<CardProps> & CardDescendants = ({ children }) => {
@@ -44,23 +42,7 @@ const CardActions: FC<CardActionsProps> = ({ children }) => {
   );
 };
 
-type CardBodyProps = {
-  children: ReactNode;
-};
-const CardBody: FC<CardBodyProps> = ({ children }) => {
-  return <div className="max-h-40 overflow-y-auto">{children}</div>;
-};
-
-type CardHeaderProps = {
-  children: ReactNode;
-};
-const CardHeader: FC<CardBodyProps> = ({ children }) => {
-  return <div className="max-h-40 overflow-y-auto">{children}</div>;
-};
-
 Card.Actions = CardActions;
 Card.Media = CardMedia;
-Card.Header = CardHeader;
-Card.Body = CardBody;
 
 export default Card;

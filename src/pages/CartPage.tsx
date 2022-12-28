@@ -6,6 +6,7 @@ import { useCartContext } from '../context/CartContext';
 import { IoAdd, IoRemove } from 'react-icons/io5';
 import SelectControl from '../components/SelectControl';
 import { itemPerPageOptions } from '../config';
+import BuyForm from '../components/BuyForm';
 
 const CartPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -64,7 +65,7 @@ const CartPage = () => {
         <div>Products: {totalCount}</div>
         <button onClick={() => setIsOpen(() => true)}>Buy Now</button>
         <Popup isOpen={isOpen} onClose={() => setIsOpen(() => false)}>
-          <div className="min-w-[440px] min-h-[700px] bg-slate-50 rounded-2xl border border-black border-opacity-10 shadow"></div>
+          <BuyForm />
         </Popup>
       </div>
     </div>

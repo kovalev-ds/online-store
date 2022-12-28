@@ -6,7 +6,7 @@ const App = () => {
   const { totalPrice, totalCount } = useCartContext();
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-pink-100">
       <nav className="py-4">
         <div className="container flex justify-between items-center">
           <h1 className="text-3xl font-bold tracking-wide">

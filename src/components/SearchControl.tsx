@@ -11,6 +11,7 @@ const SearchControl: FC<SearchControlProps> = (props) => {
   return (
     <div>
       <input
+        className="rounded-md bg-white border border-gray-300"
         onChange={(e) => handle(e.target.value)}
         value={value}
         name="search"
